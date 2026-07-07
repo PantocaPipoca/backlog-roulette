@@ -15,18 +15,22 @@ on:
 jobs:
   # This job builds the executable on Windows, macOS, and Linux in parallel
   build:
+    name: Build — ${{ matrix.display_name }}
     strategy:
       matrix:
         include:
           - os: windows-latest
+            display_name: Windows (exe)
             exe_path: dist/backlog_roulette.exe
             exe_name: backlog_roulette.exe
             package_name: backlog_roulette-windows
           - os: macos-latest
+            display_name: macOS
             exe_path: dist/backlog_roulette
             exe_name: backlog_roulette
             package_name: backlog_roulette-macos
           - os: ubuntu-latest
+            display_name: Linux
             exe_path: dist/backlog_roulette
             exe_name: backlog_roulette
             package_name: backlog_roulette-linux
@@ -97,5 +101,5 @@ jobs:
         with:
           tag_name: latest
           name: Latest build
-          prerelease: true
+          make_latest: true
           files: release/*
