@@ -1,0 +1,101 @@
+# Workflow to build Backlog Roulette executables
+name: Build and Release
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This job builds the executable on Windows, macOS, and Linux in parallel
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            exe_path: dist/backlog_roulette.exe
+            exe_name: backlog_roulette.exe
+            package_name: backlog_roulette-windows
+          - os: macos-latest
+            exe_path: dist/backlog_roulette
+            exe_name: backlog_roulette
+            package_name: backlog_roulette-macos
+          - os: ubuntu-latest
+            exe_path: dist/backlog_roulette
+            exe_name: backlog_roulette
+            package_name: backlog_roulette-linux
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build executable
+        run: pyinstaller --onefile --name backlog_roulette main.py
+
+      # Bundles the exe together with the example wheels, ready to distribute
+      - name: Assemble package folder
+        shell: bash
+        run: |
+          mkdir -p package/${{ matrix.package_name }}/roulettes
+          cp "${{ matrix.exe_path }}" "package/${{ matrix.package_name }}/${{ matrix.exe_name }}"
+          cp roulettes/example_games.json package/${{ matrix.package_name }}/roulettes/
+          cp roulettes/example_movies.json package/${{ matrix.package_name }}/roulettes/
+          cp roulettes/example_books.json package/${{ matrix.package_name }}/roulettes/
+
+      - name: Zip package
+        shell: bash
+        run: |
+          cd package
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            powershell -Command "Compress-Archive -Path '${{ matrix.package_name }}' -DestinationPath '${{ matrix.package_name }}.zip'"
+          else
+            zip -r "${{ matrix.package_name }}.zip" "${{ matrix.package_name }}"
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.package_name }}.zip
+          path: package/${{ matrix.package_name }}.zip
+
+  # Publishes the three zips to a rolling "latest" Release, only on actual pushes to main
+  # (this excludes PRs, which only run the build job above to validate they compile)
+  release:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Flatten artifacts
+        run: |
+          mkdir release
+          find artifacts -type f -exec cp {} release/ \;
+
+      - name: Publish latest Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest build
+          prerelease: true
+          files: release/*
