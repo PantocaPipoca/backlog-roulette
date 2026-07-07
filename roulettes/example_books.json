@@ -1,0 +1,38 @@
+{
+  "type": "books",
+  "tiers": { "S": 50, "A": 35, "B": 15 },
+  "items": [
+    {
+      "name": "Project Hail Mary",
+      "tier": "S",
+      "pages": 496
+    },
+    {
+      "name": "Dune",
+      "tier": "S",
+      "series": ["Dune"],
+      "pages": 412
+    },
+    {
+      "name": "The Name of the Wind",
+      "tier": "A",
+      "series": ["The Kingkiller Chronicle"],
+      "pages": 662
+    },
+    {
+      "name": "Piranesi",
+      "tier": "A",
+      "pages": 245
+    },
+    {
+      "name": "Klara and the Sun",
+      "tier": "B",
+      "pages": 303
+    },
+    {
+      "name": "The Martian",
+      "tier": "B",
+      "pages": 369
+    }
+  ]
+}

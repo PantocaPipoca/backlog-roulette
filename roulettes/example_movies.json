@@ -1,0 +1,37 @@
+{
+  "type": "movies",
+  "tiers": { "S": 50, "A": 35, "B": 15 },
+  "items": [
+    {
+      "name": "Blade Runner 2049",
+      "tier": "S",
+      "runtime_minutes": 164
+    },
+    {
+      "name": "The Dark Knight",
+      "tier": "S",
+      "series": ["The Dark Knight Trilogy"],
+      "runtime_minutes": 152
+    },
+    {
+      "name": "Parasite",
+      "tier": "A",
+      "runtime_minutes": 132
+    },
+    {
+      "name": "Whiplash",
+      "tier": "A",
+      "runtime_minutes": 106
+    },
+    {
+      "name": "The Grand Budapest Hotel",
+      "tier": "B",
+      "runtime_minutes": 99
+    },
+    {
+      "name": "Coherence",
+      "tier": "B",
+      "note": "Low budget, high concept"
+    }
+  ]
+}

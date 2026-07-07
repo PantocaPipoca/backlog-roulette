@@ -1,0 +1,38 @@
+{
+  "type": "games",
+  "tiers": { "S": 50, "A": 35, "B": 15 },
+  "items": [
+    {
+      "name": "Elden Ring",
+      "tier": "S",
+      "estimated_hours": 60,
+      "note": "Already 20h in, just finish it"
+    },
+    {
+      "name": "Resident Evil 4 Remake",
+      "tier": "S",
+      "series": ["Resident Evil"],
+      "completion_condition": "Beat on Standard"
+    },
+    {
+      "name": "Hades",
+      "tier": "A",
+      "estimated_hours": 25
+    },
+    {
+      "name": "Hollow Knight",
+      "tier": "A",
+      "estimated_hours": 35,
+      "note": "Get Silksong-ready"
+    },
+    {
+      "name": "Stardew Valley",
+      "tier": "B"
+    },
+    {
+      "name": "Celeste",
+      "tier": "B",
+      "estimated_hours": 8
+    }
+  ]
+}

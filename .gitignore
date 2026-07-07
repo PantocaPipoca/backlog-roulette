@@ -1,0 +1,11 @@
+.vscode
+.venv
+__pycache__
+dist/
+build/
+*.spec
+data/*
+roulettes/*
+!roulettes/example_games.json
+!roulettes/example_movies.json
+!roulettes/example_books.json
